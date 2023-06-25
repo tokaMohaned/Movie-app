@@ -44,24 +44,24 @@ class _BottomNavgationBarState extends State<BottomNavgationBar> {
             ),
 
             BottomNavigationBarItem(
-              icon: ImageIcon(AssetImage("assets/images/Home icon.png")),
+              icon: Icon(Icons.search),
               label: "SEARCH",
-              //backgroundColor: Theme.of(context).yello
             ),
 
             BottomNavigationBarItem(
-              icon: ImageIcon(AssetImage("assets/images/Home icon.png")),
+              icon: ImageIcon(AssetImage("assets/images/browse icon.png")),
               label: "BROWSE",
               //backgroundColor: Theme.of(context).yello
             ),
 
             BottomNavigationBarItem(
-              icon: ImageIcon(AssetImage("assets/images/Home icon.png")),
+              icon: ImageIcon(AssetImage("assets/images/whatchlist icon.png")),
               label: "WATCHLIST",
               backgroundColor: Theme.of(context).primaryColor
             ),
           ],
         ),
+        body: tabs[index],
       )
     ],
 
