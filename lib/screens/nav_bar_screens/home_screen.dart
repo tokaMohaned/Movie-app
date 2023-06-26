@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:untitled1/widget/popular_movie.dart';
 
 class HomeScreen extends StatelessWidget {
   static const String routeName="HomeScreen";
@@ -8,8 +9,7 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      color: Colors.pink,
-    );
+    return Popular_movie();
+
   }
 }
