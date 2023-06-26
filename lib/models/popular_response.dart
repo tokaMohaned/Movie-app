@@ -1,14 +1,3 @@
-import 'package:dio/dio.dart';
-import '../../../constants/constants.dart';
-
-class ApiManager {
-  static Future<Results> getPopular() async {
-    final dio = Dio();
-    final response = await dio.get("$BaseUrl/$popularEndPoint");
-    final popularResponse = PopularResponse.fromJson(response.data);
-    return popularResponse.results!.first;
-  }
-}
 
 class PopularResponse {
   PopularResponse({

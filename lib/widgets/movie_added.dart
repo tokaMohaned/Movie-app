@@ -5,12 +5,17 @@ class MovieAdded extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Stack(
-      alignment: Alignment.center,
-      children: [
-        Icon(Icons.bookmark,color:  Color.fromRGBO(215, 158, 51, 70),size: 50,),
-        Icon(Icons.check,color: Colors.white,size: 20),
-      ],
+    return GestureDetector(
+      onTap: (){
+        print("Holaaaa");
+      },
+      child: const Stack(
+        alignment: Alignment.center,
+        children: [
+          Icon(Icons.bookmark,color:  Color.fromRGBO(215, 158, 51, 70),size: 50,),
+          Icon(Icons.check,color: Colors.white,size: 20),
+        ],
+      ),
     );
   }
 }

@@ -1,23 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import '../api/network/remot/api_manager.dart';
+import 'package:untitled1/api/network/remot/api_manager.dart';
+import '../constants/constants.dart';
 import '../models/latest_model.dart';
+import 'add_movie.dart';
 
-class NewReleaseWidget extends StatefulWidget {
+class NewReleaseWidget extends StatelessWidget {
   const NewReleaseWidget({super.key});
-
-  @override
-  _NewReleaseWidgetState createState() => _NewReleaseWidgetState();
-}
-
-class _NewReleaseWidgetState extends State<NewReleaseWidget> {
-  Future<List<LatestModel>>? latestMovies;
-
-  @override
-  void initState() {
-    super.initState();
-    latestMovies = ApiManager.getLatestMovies();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -38,16 +27,24 @@ class _NewReleaseWidgetState extends State<NewReleaseWidget> {
                 height: 10.h,
               ),
               Expanded(
-                child: FutureBuilder<List<LatestModel>>(
-                  future: latestMovies,
+                child: FutureBuilder<LatestModel>(
+                  future: ApiManager.getLatestMovies(),
                   builder: (context, snapshot) {
                     if (snapshot.hasData) {
                       return ListView.separated(
                         scrollDirection: Axis.horizontal,
-                        itemCount: snapshot.data!.length,
+                        itemCount: 5,
                         itemBuilder: (BuildContext context, int index) {
-                          LatestModel movie = snapshot.data![index];
-                          return Text(movie.title!);
+                          LatestModel movie = snapshot.data!;
+                          return Stack(
+                            children: [
+                              Image.network(
+                                "$baseImageUrl/original/${movie.posterPath!}",
+                                // fit: BoxFit.cover,
+                              ),
+                              const AddMovie()
+                            ],
+                          );
                         },
                         separatorBuilder: (BuildContext context, int index) {
                           return SizedBox(

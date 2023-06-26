@@ -1,5 +1,6 @@
 String apikey = "e5fbe73fc58f4f997b2f7c65a8fc6863";
-String BaseUrl = "https://api.themoviedb.org";
+String baseUrl = "https://api.themoviedb.org";
+String baseImageUrl = "https://image.tmdb.org/t/p";
 String topRatedEndPoint = "3/movie/top-rated";
 String popularEndPoint = "3/movie/popular";
 String latestEndPoint = "3/movie/latest";
