@@ -1,13 +1,13 @@
 
 
-class TopRated {
-  TopRated({
+class TopRatedResponse {
+  TopRatedResponse({
       this.page, 
       this.results, 
       this.totalPages, 
       this.totalResults,});
 
-  TopRated.fromJson(dynamic json) {
+  TopRatedResponse.fromJson(dynamic json) {
     page = json['page'];
     if (json['results'] != null) {
       results = [];
@@ -117,5 +117,4 @@ class Results {
     map['vote_count'] = voteCount;
     return map;
   }
-
 }

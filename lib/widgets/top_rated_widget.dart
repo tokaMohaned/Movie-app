@@ -1,16 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:untitled1/api/network/remot/api_manager.dart';
+import 'package:untitled1/models/top_rated_response.dart';
+import 'package:untitled1/widgets/add_movie.dart';
+import '../api/network/remot/api_manager.dart';
 import '../constants/constants.dart';
-import '../models/latest_model.dart';
-import 'add_movie.dart';
 
-class NewReleaseWidget extends StatelessWidget {
-  const NewReleaseWidget({super.key});
+
+class TopRatedWidget extends StatelessWidget {
+  const TopRatedWidget({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Expanded(
+    return  Expanded(
       flex: 2,
       child: Container(
         color: const Color(0xFF282A28),
@@ -20,26 +21,35 @@ class NewReleaseWidget extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const Text(
-                "New Releases",
+                "Top Rated",
                 style: TextStyle(color: Colors.white, fontSize: 15),
               ),
               SizedBox(
                 height: 10.h,
               ),
               Expanded(
-                child: FutureBuilder<LatestModel>(
-                  future: ApiManager.getLatestMovies(),
+                child: FutureBuilder<TopRatedResponse>(
+                  future: ApiManager.getTopRatedMovies(),
                   builder: (context, snapshot) {
-                    if (snapshot.hasData) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return const Center(child: CircularProgressIndicator());
+                    }
+                    if (snapshot.hasError) {
+                      return Text('Error: ${snapshot.error}',style: const TextStyle(color: Colors.white,fontSize: 15),);
+                    }
+                    if (snapshot.data == null) {
+                      return Image.asset("assets/images/loading.png");
+                    }
+                      print("object");
+                    TopRatedResponse topRated = snapshot.data!;
                       return ListView.separated(
                         scrollDirection: Axis.horizontal,
-                        itemCount: 5,
+                        itemCount: snapshot.data!.results!.length,
                         itemBuilder: (BuildContext context, int index) {
-                          LatestModel movie = snapshot.data!;
                           return Stack(
                             children: [
                               Image.network(
-                                "$baseImageUrl/original/${movie.posterPath!}",
+                              "$baseImageUrl/original/${topRated.results?[index].backdropPath??"8riWcADI1ekEiBguVB9vkilhiQm.jpg"}",
                                 // fit: BoxFit.cover,
                               ),
                               const AddMovie()
@@ -52,11 +62,6 @@ class NewReleaseWidget extends StatelessWidget {
                           );
                         },
                       );
-                    } else if (snapshot.hasError) {
-                      return Text('Error: ${snapshot.error}',style: const TextStyle(color: Colors.white,fontSize: 15),);
-                    } else {
-                      return const Center(child: CircularProgressIndicator());
-                    }
                   },
                 ),
               ),

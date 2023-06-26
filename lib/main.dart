@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:untitled1/screens/movie_details.dart';
 import 'package:untitled1/shared/my_theme.dart';
-import 'package:untitled1/splash/splash_screen.dart';
+import 'package:untitled1/screens/splash_screen.dart';
 
 import 'home_layout/home_layout.dart';
 
@@ -20,6 +21,7 @@ class MyApp extends StatelessWidget {
       routes:{
         SplashScreen.routeName:(context)=>const SplashScreen(),
         HomeLayout.routeName:(context)=>const HomeLayout(),
+        MovieDetails.routeName:(context)=>const MovieDetails(),
       },
       debugShowCheckedModeBanner: false,
     );
