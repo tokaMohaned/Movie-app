@@ -1,12 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+import '../models/popular_response.dart';
+import '../provider/my_app_provider.dart';
 
 class MovieAdded extends StatelessWidget {
-  const MovieAdded({super.key});
+  var result;
+   MovieAdded({super.key, required this.result});
 
   @override
   Widget build(BuildContext context) {
+    final provider = Provider.of<MyAppProvider>(context);
     return GestureDetector(
       onTap: (){
+        provider.removeWatchList(result);
         print("Holaaaa");
       },
       child: const Stack(

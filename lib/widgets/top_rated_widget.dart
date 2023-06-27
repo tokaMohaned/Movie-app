@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:untitled1/models/top_rated_response.dart';
+import 'package:untitled1/screens/movie_details.dart';
 import 'package:untitled1/widgets/add_movie.dart';
+import 'package:untitled1/widgets/widgets.dart';
 import '../api/network/remot/api_manager.dart';
 import '../constants/constants.dart';
 
@@ -22,7 +24,7 @@ class TopRatedWidget extends StatelessWidget {
             children: [
               const Text(
                 "Top Rated",
-                style: TextStyle(color: Colors.white, fontSize: 15),
+                style: TextStyle(color: Colors.white, fontSize: 18,fontWeight: FontWeight.w800),
               ),
               SizedBox(
                 height: 10.h,
@@ -40,20 +42,26 @@ class TopRatedWidget extends StatelessWidget {
                     if (snapshot.data == null) {
                       return Image.asset("assets/images/loading.png");
                     }
-                      print("object");
                     TopRatedResponse topRated = snapshot.data!;
                       return ListView.separated(
                         scrollDirection: Axis.horizontal,
                         itemCount: snapshot.data!.results!.length,
                         itemBuilder: (BuildContext context, int index) {
-                          return Stack(
-                            children: [
-                              Image.network(
-                              "$baseImageUrl/original/${topRated.results?[index].backdropPath??"8riWcADI1ekEiBguVB9vkilhiQm.jpg"}",
-                                // fit: BoxFit.cover,
-                              ),
-                              const AddMovie()
-                            ],
+                              String movieId = "${topRated.results![index].id}";
+                              Results movie = topRated.results![index];
+                          return GestureDetector(
+                            onTap: (){
+                              nextScreen(context, MovieDetails(movieId: movieId, movie: movie));
+                            },
+                            child: Stack(
+                              children: [
+                                Image.network(
+                                "$baseImageUrl/original/${topRated.results?[index].backdropPath}",
+                                  // fit: BoxFit.cover,
+                                ),
+                                   AddMovie(result: topRated.results![index],)
+                              ],
+                            ),
                           );
                         },
                         separatorBuilder: (BuildContext context, int index) {

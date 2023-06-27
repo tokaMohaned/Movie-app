@@ -1,19 +1,25 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import '../models/top_rated_response.dart';
+import '../models/popular_response.dart';
+import '../provider/my_app_provider.dart';
 
 class AddMovie extends StatelessWidget {
-  const AddMovie({super.key});
+  var result;
+   AddMovie({Key? key, required this.result}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final provider = Provider.of<MyAppProvider>(context);
     return GestureDetector(
-      onTap: (){
-       print("Hiiiiiiii");
+      onTap: () {
+        provider.addWatchList(result);
       },
       child: const Stack(
         alignment: Alignment.center,
         children: [
-          Icon(Icons.bookmark,color: Color.fromRGBO(81, 78, 75, 70),size: 50,),
-          Icon(Icons.add,color: Colors.white,size: 20,),
+          Icon(Icons.bookmark, color: Color.fromRGBO(81, 78, 75, 70), size: 50,),
+          Icon(Icons.add, color: Colors.white, size: 20,),
         ],
       ),
     );

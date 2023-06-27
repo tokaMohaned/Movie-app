@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 
-import '../provider/bottom_navigation_bar_provider.dart';
+import '../provider/my_app_provider.dart';
 
 class HomeLayout extends StatelessWidget {
   static const String routeName = "HomeLayout";
@@ -17,9 +17,9 @@ class HomeLayout extends StatelessWidget {
         splitScreenMode: true,
       builder: (BuildContext context, Widget? child) {
         return ChangeNotifierProvider(
-          create: (context) => BottomNavigationBarProvider(),
+          create: (context) => MyAppProvider(),
           builder: (context, child) {
-            var provider = Provider.of<BottomNavigationBarProvider>(context);
+            var provider = Provider.of<MyAppProvider>(context);
             return Scaffold(
                 body: provider.tabs[provider.index],
                 bottomNavigationBar: Theme(

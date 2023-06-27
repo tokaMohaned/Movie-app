@@ -1,17 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:provider/provider.dart';
+import 'package:untitled1/provider/my_app_provider.dart';
+import 'package:untitled1/widgets/widgets.dart';
 
 import '../api/network/remot/api_manager.dart';
 import '../constants/constants.dart';
 import '../models/popular_response.dart';
 import '../screens/movie_details.dart';
 import 'add_movie.dart';
+import 'movie_added.dart';
 
 class PopularWidget extends StatelessWidget {
-  const PopularWidget({super.key});
+  const PopularWidget({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    var provider = Provider.of<MyAppProvider>(context);
     return FutureBuilder<PopularResponse>(
       future: ApiManager.getPopular(),
       builder: (context, snapshot) {
@@ -23,27 +28,27 @@ class PopularWidget extends StatelessWidget {
             children: [
               const Text("Something went wrong"),
               TextButton(
-                onPressed: () {
-
-                },
+                onPressed: () {},
                 child: const Text("Try Again"),
               )
             ],
           );
-        } if ( snapshot.data == null) {
+        }
+        if (snapshot.data == null) {
           return Image.asset("assets/images/loading.png");
         }
         PopularResponse movie = snapshot.data!;
+        String movieId = "${movie.results!.first.id}";
+        Results result = movie.results!.first;
         return Stack(
           alignment: Alignment.bottomLeft,
           children: [
             SizedBox(
               height: 280.w,
               child: GestureDetector(
-                onTap: (){
-                  String movieId = "${movie.results!.first.id}";
-                  print("movieId : $movieId");
-                 Navigator.pushNamed(context, MovieDetails.routeName, arguments: movieId);
+                onTap: () {
+                  nextScreen(
+                      context, MovieDetails(movieId: movieId, movie: result));
                 },
                 child: Stack(
                   alignment: Alignment.center,
@@ -73,9 +78,11 @@ class PopularWidget extends StatelessWidget {
                       children: [
                         Image.network(
                           "$baseImageUrl/original/${movie.results!.first.posterPath!}",
-                          // fit: BoxFit.cover,
                         ),
-                        const AddMovie(),
+                        if (provider.isMovieInWatchList(movie.results!.first))
+                          MovieAdded(result: movie.results!.first)
+                        else
+                          AddMovie(result: movie.results!.first)
                       ],
                     ),
                     SizedBox(
@@ -90,8 +97,7 @@ class PopularWidget extends StatelessWidget {
                           style: TextStyle(
                               color: Colors.white,
                               fontSize: 14.sp,
-                              fontWeight: FontWeight.bold
-                          ),
+                              fontWeight: FontWeight.bold),
                         ),
                         Row(
                           children: [
@@ -102,7 +108,11 @@ class PopularWidget extends StatelessWidget {
                                 fontSize: 10.sp,
                               ),
                             ),
-                            const Icon(Icons.star,color: Colors.amberAccent,size: 13,),
+                            const Icon(
+                              Icons.star,
+                              color: Colors.amberAccent,
+                              size: 13,
+                            ),
                             Text(
                               movie.results!.first.voteAverage!.toString(),
                               style: TextStyle(
