@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
-import '../models/popular_response.dart';
+import 'package:untitled1/widgets/widgets.dart';
 import '../provider/my_app_provider.dart';
 
 class MovieAdded extends StatelessWidget {
@@ -14,7 +13,7 @@ class MovieAdded extends StatelessWidget {
     return GestureDetector(
       onTap: (){
         provider.removeWatchList(result);
-        print("Holaaaa");
+        showSnackBar(color: Colors.redAccent, context: context, text: 'Movie has been removed to watchList',);
       },
       child: const Stack(
         alignment: Alignment.center,

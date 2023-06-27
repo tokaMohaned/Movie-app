@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:untitled1/models/top_rated_response.dart';
@@ -55,9 +56,11 @@ class TopRatedWidget extends StatelessWidget {
                             },
                             child: Stack(
                               children: [
-                                Image.network(
-                                "$baseImageUrl/original/${topRated.results?[index].backdropPath}",
-                                  // fit: BoxFit.cover,
+                                CachedNetworkImage(
+                                  imageUrl: "$baseImageUrl/original/${topRated.results?[index].backdropPath}",
+                                  progressIndicatorBuilder: (context, url, downloadProgress) =>
+                                      Center(child: CircularProgressIndicator(value: downloadProgress.progress)),
+                                  errorWidget: (context, url, error) => const Icon(Icons.error),
                                 ),
                                    AddMovie(result: topRated.results![index],)
                               ],

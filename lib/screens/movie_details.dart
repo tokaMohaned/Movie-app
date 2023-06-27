@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../constants/constants.dart';
@@ -75,11 +76,13 @@ class MovieDetails extends StatelessWidget {
                   child: Stack(
                     alignment: Alignment.topLeft,
                     children: [
-                      Image.network(
-                        "$baseImageUrl/original/${movie.posterPath!}",
-                        // fit: BoxFit.cover,
+                      CachedNetworkImage(
+                        imageUrl: "$baseImageUrl/original/${movie.posterPath!}",
+                        progressIndicatorBuilder: (context, url, downloadProgress) =>
+                            Center(child: CircularProgressIndicator(value: downloadProgress.progress)),
+                        errorWidget: (context, url, error) => const Icon(Icons.error),
                       ),
-                        // AddMovie(result: "",),
+                     AddMovie(result: movie),
                     ],
                   ),
                 ),

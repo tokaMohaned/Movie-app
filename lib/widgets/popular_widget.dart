@@ -1,3 +1,5 @@
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
@@ -38,97 +40,119 @@ class PopularWidget extends StatelessWidget {
           return Image.asset("assets/images/loading.png");
         }
         PopularResponse movie = snapshot.data!;
-        String movieId = "${movie.results!.first.id}";
-        Results result = movie.results!.first;
-        return Stack(
-          alignment: Alignment.bottomLeft,
-          children: [
-            SizedBox(
-              height: 280.w,
-              child: GestureDetector(
-                onTap: () {
-                  nextScreen(
-                      context, MovieDetails(movieId: movieId, movie: result));
-                },
-                child: Stack(
-                  alignment: Alignment.center,
-                  children: [
-                    Image.network(
-                      "$baseImageUrl/original/${movie.results!.first.backdropPath!}",
-                      fit: BoxFit.cover,
-                    ),
-                    const Icon(
-                      Icons.play_circle,
-                      size: 90,
-                      color: Colors.white,
-                    ),
-                  ],
+        return CarouselSlider.builder(
+          itemCount: 15,
+          itemBuilder:
+              (BuildContext context, int itemIndex, int pageViewIndex){
+        String movieId = "${movie.results![itemIndex].id}";
+        Results result = movie.results![itemIndex];
+         return Stack(
+            alignment: Alignment.bottomLeft,
+            children: [
+              SizedBox(
+                height: 280.w,
+                child: GestureDetector(
+                  onTap: () {
+                    nextScreen(
+                        context, MovieDetails(movieId: movieId, movie: result));
+                  },
+                  child: Stack(
+                    alignment: Alignment.center,
+                    children: [
+                      CachedNetworkImage(
+                        imageUrl: "$baseImageUrl/original/${movie.results![itemIndex].backdropPath!}",
+                        progressIndicatorBuilder: (context, url, downloadProgress) =>
+                            CircularProgressIndicator(value: downloadProgress.progress),
+                        errorWidget: (context, url, error) => const Center(child: Icon(Icons.error)),
+                      ),
+                      const Icon(
+                        Icons.play_circle,
+                        size: 90,
+                        color: Color.fromRGBO(255, 255, 255, 120),
+                      ),
+                    ],
+                  ),
                 ),
               ),
-            ),
-            SizedBox(
-              height: 150.h,
-              child: Padding(
-                padding: EdgeInsets.symmetric(horizontal: 21.w, vertical: 2.h),
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  children: [
-                    Stack(
-                      alignment: Alignment.topLeft,
-                      children: [
-                        Image.network(
-                          "$baseImageUrl/original/${movie.results!.first.posterPath!}",
-                        ),
-                        if (provider.isMovieInWatchList(movie.results!.first))
-                          MovieAdded(result: movie.results!.first)
-                        else
-                          AddMovie(result: movie.results!.first)
-                      ],
-                    ),
-                    SizedBox(
-                      width: 14.w,
-                    ),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        Text(
-                          movie.results!.first.title!,
-                          style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 14.sp,
-                              fontWeight: FontWeight.bold),
-                        ),
-                        Row(
-                          children: [
-                            Text(
-                              movie.results!.first.releaseDate!,
+              SizedBox(
+                height: 150.h,
+                child: Padding(
+                  padding:
+                  EdgeInsets.symmetric(horizontal: 21.w, vertical: 2.h),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      Stack(
+                        alignment: Alignment.topLeft,
+                        children: [
+                          CachedNetworkImage(
+                            imageUrl: "$baseImageUrl/original/${movie.results![itemIndex].posterPath!}",
+                            progressIndicatorBuilder: (context, url, downloadProgress) =>
+                                Center(child: CircularProgressIndicator(value: downloadProgress.progress)),
+                            errorWidget: (context, url, error) => const Icon(Icons.error),
+                          ),
+                          if (provider.isMovieInWatchList(movie.results!.first))
+                            MovieAdded(result: movie.results!.first)
+                          else
+                            AddMovie(result: movie.results!.first)
+                        ],
+                      ),
+                      SizedBox(
+                        width: 14.w,
+                      ),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          SizedBox(
+                            width:150.w ,
+                            child: Text(
+                              movie.results![itemIndex].title!,
+                              overflow: TextOverflow.ellipsis,
+                              maxLines: 2,
                               style: TextStyle(
-                                color: Colors.grey[300],
-                                fontSize: 10.sp,
+                                  color: Colors.white,
+                                  fontSize: 14.sp,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                          ),
+                          Row(
+                            children: [
+                              Text(
+                                movie.results![itemIndex].releaseDate!,
+                                style: TextStyle(
+                                  color: Colors.grey[300],
+                                  fontSize: 10.sp,
+                                ),
                               ),
-                            ),
-                            const Icon(
-                              Icons.star,
-                              color: Colors.amberAccent,
-                              size: 13,
-                            ),
-                            Text(
-                              movie.results!.first.voteAverage!.toString(),
-                              style: TextStyle(
-                                color: Colors.grey[300],
-                                fontSize: 10.sp,
+                              const Icon(
+                                Icons.star,
+                                color: Colors.amberAccent,
+                                size: 13,
                               ),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ],
+                              Text(
+                                movie.results![itemIndex].voteAverage!.toString(),
+                                style: TextStyle(
+                                  color: Colors.grey[300],
+                                  fontSize: 10.sp,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
               ),
-            ),
-          ],
+            ],
+          );
+        },
+          options: CarouselOptions(
+            aspectRatio: 2.0,
+            enlargeCenterPage: true,
+            autoPlay: true,
+          ),
         );
       },
     );

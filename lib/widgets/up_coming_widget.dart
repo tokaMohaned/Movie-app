@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:untitled1/api/network/remot/api_manager.dart';
@@ -64,9 +65,11 @@ class UpComingWidget extends StatelessWidget {
                                 width: 190,
                                 child: Stack(
                                   children: [
-                                    Image.network(
-                                      "$baseImageUrl/original/${upComing.results?[index].backdropPath }",
-                                      // fit: BoxFit.cover,
+                                    CachedNetworkImage(
+                                      imageUrl: "$baseImageUrl/original/${upComing.results?[index].backdropPath }",
+                                      progressIndicatorBuilder: (context, url, downloadProgress) =>
+                                          Center(child: CircularProgressIndicator(value: downloadProgress.progress)),
+                                      errorWidget: (context, url, error) => const Icon(Icons.error),
                                     ),
                                     AddMovie(result: upComing.results![index],)
                                   ],

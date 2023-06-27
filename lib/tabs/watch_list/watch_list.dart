@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
@@ -52,8 +53,11 @@ class Watchlist extends StatelessWidget {
                         child: Stack(
                           alignment: Alignment.topLeft,
                           children: [
-                            Image.network(
-                              "$baseImageUrl/original/${movie.posterPath!}",
+                            CachedNetworkImage(
+                              imageUrl: "$baseImageUrl/original/${movie.posterPath!}",
+                              progressIndicatorBuilder: (context, url, downloadProgress) =>
+                                  Center(child: CircularProgressIndicator(value: downloadProgress.progress)),
+                              errorWidget: (context, url, error) => const Icon(Icons.error),
                             ),
                             MovieAdded(
                               result: movie,
@@ -80,7 +84,7 @@ class Watchlist extends StatelessWidget {
                             height: 6.h,
                           ),
                           Text(
-                            "${movie.releaseDate}".substring(0, 4) ?? "",
+                            "${movie.releaseDate}".substring(0, 4),
                             style: const TextStyle(color: Colors.grey),
                           ),
                           SizedBox(

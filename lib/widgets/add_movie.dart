@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../models/top_rated_response.dart';
-import '../models/popular_response.dart';
+import 'package:untitled1/widgets/widgets.dart';
+
 import '../provider/my_app_provider.dart';
 
 class AddMovie extends StatelessWidget {
@@ -14,6 +14,7 @@ class AddMovie extends StatelessWidget {
     return GestureDetector(
       onTap: () {
         provider.addWatchList(result);
+        showSnackBar(color: Colors.green, context: context, text: 'Movie has been added to watchList',);
       },
       child: const Stack(
         alignment: Alignment.center,
