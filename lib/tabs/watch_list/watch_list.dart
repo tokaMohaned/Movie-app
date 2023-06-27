@@ -2,6 +2,8 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
+import 'package:untitled1/screens/movie_details.dart';
+import 'package:untitled1/widgets/widgets.dart';
 import '../../constants/constants.dart';
 import '../../provider/my_app_provider.dart';
 import '../../widgets/movie_added.dart';
@@ -32,6 +34,7 @@ class Watchlist extends StatelessWidget {
               itemCount: provider.watchList.length,
               itemBuilder: (context, index) {
                 var movie = provider.watchList[index];
+                String movieId = movie.posterPath!;
                 if (provider.watchList.isEmpty) {
                   return Center(
                     child: Text(
@@ -43,64 +46,74 @@ class Watchlist extends StatelessWidget {
                     ),
                   );
                 }
-                return Container(
-                  decoration:
-                      BoxDecoration(borderRadius: BorderRadius.circular(8)),
-                  child: Row(
-                    children: [
-                      SizedBox(
-                        height: 150.h,
-                        child: Stack(
-                          alignment: Alignment.topLeft,
-                          children: [
-                            CachedNetworkImage(
-                              imageUrl: "$baseImageUrl/original/${movie.posterPath!}",
-                              progressIndicatorBuilder: (context, url, downloadProgress) =>
-                                  Center(child: CircularProgressIndicator(value: downloadProgress.progress)),
-                              errorWidget: (context, url, error) => const Icon(Icons.error),
-                            ),
-                            MovieAdded(
-                              result: movie,
-                            ),
-                          ],
+                return GestureDetector(
+                  onTap: () {
+                    nextScreen(
+                        context, MovieDetails(movieId: movieId, movie: movie));
+                  },
+                  child: Container(
+                    decoration:
+                        BoxDecoration(borderRadius: BorderRadius.circular(8)),
+                    child: Row(
+                      children: [
+                        SizedBox(
+                          height: 150.h,
+                          child: Stack(
+                            alignment: Alignment.topLeft,
+                            children: [
+                              CachedNetworkImage(
+                                imageUrl:
+                                    "$baseImageUrl/original/${movie.posterPath!}",
+                                progressIndicatorBuilder:
+                                    (context, url, downloadProgress) => Center(
+                                        child: CircularProgressIndicator(
+                                            value: downloadProgress.progress)),
+                                errorWidget: (context, url, error) =>
+                                    const Icon(Icons.error),
+                              ),
+                              MovieAdded(
+                                result: movie,
+                              ),
+                            ],
+                          ),
                         ),
-                      ),
-                      SizedBox(
-                        width: 20.w,
-                      ),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          SizedBox(
-                              width: 200.w,
-                              child: Text(movie.title ?? "",
-                                  maxLines: 2,
-                                  overflow: TextOverflow.ellipsis,
-                                  style: const TextStyle(
-                                      fontSize: 20,
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.w400))),
-                          SizedBox(
-                            height: 6.h,
-                          ),
-                          Text(
-                            "${movie.releaseDate}".substring(0, 4),
-                            style: const TextStyle(color: Colors.grey),
-                          ),
-                          SizedBox(
-                            height: 6.h,
-                          ),
-                          SizedBox(
-                              width: 200.w,
-                              child: Text(movie.overview ?? "",
-                                  maxLines: 5,
-                                  overflow: TextOverflow.ellipsis,
-                                  style: const TextStyle(
-                                      color: Colors.grey,
-                                      fontWeight: FontWeight.w600))),
-                        ],
-                      )
-                    ],
+                        SizedBox(
+                          width: 20.w,
+                        ),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            SizedBox(
+                                width: 200.w,
+                                child: Text(movie.title ?? "",
+                                    maxLines: 2,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: const TextStyle(
+                                        fontSize: 20,
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.w400))),
+                            SizedBox(
+                              height: 6.h,
+                            ),
+                            Text(
+                              "${movie.releaseDate}".substring(0, 4),
+                              style: const TextStyle(color: Colors.grey),
+                            ),
+                            SizedBox(
+                              height: 6.h,
+                            ),
+                            SizedBox(
+                                width: 200.w,
+                                child: Text(movie.overview ?? "",
+                                    maxLines: 5,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: const TextStyle(
+                                        color: Colors.grey,
+                                        fontWeight: FontWeight.w600))),
+                          ],
+                        )
+                      ],
+                    ),
                   ),
                 );
               },

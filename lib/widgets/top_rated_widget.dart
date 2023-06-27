@@ -1,12 +1,15 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:provider/provider.dart';
 import 'package:untitled1/models/top_rated_response.dart';
 import 'package:untitled1/screens/movie_details.dart';
 import 'package:untitled1/widgets/add_movie.dart';
 import 'package:untitled1/widgets/widgets.dart';
 import '../api/network/remot/api_manager.dart';
 import '../constants/constants.dart';
+import '../provider/my_app_provider.dart';
+import 'movie_added.dart';
 
 
 class TopRatedWidget extends StatelessWidget {
@@ -14,6 +17,7 @@ class TopRatedWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var provider = Provider.of<MyAppProvider>(context);
     return  Expanded(
       flex: 2,
       child: Container(
@@ -25,7 +29,7 @@ class TopRatedWidget extends StatelessWidget {
             children: [
               const Text(
                 "Top Rated",
-                style: TextStyle(color: Colors.white, fontSize: 18,fontWeight: FontWeight.w800),
+                style: TextStyle(color: Colors.white, fontSize: 18,fontWeight: FontWeight.w700),
               ),
               SizedBox(
                 height: 10.h,
@@ -60,9 +64,12 @@ class TopRatedWidget extends StatelessWidget {
                                   imageUrl: "$baseImageUrl/original/${topRated.results?[index].backdropPath}",
                                   progressIndicatorBuilder: (context, url, downloadProgress) =>
                                       Center(child: CircularProgressIndicator(value: downloadProgress.progress)),
-                                  errorWidget: (context, url, error) => const Icon(Icons.error),
+                                  errorWidget: (context, url, error) => const Center(child: Icon(Icons.error)),
                                 ),
-                                   AddMovie(result: topRated.results![index],)
+                                provider.watchList.contains(movie)
+                                    ? MovieAdded(result: movie)
+                                    : AddMovie(result: movie)
+                                   // AddMovie(result: topRated.results![index],)
                               ],
                             ),
                           );

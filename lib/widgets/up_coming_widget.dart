@@ -1,18 +1,22 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:provider/provider.dart';
 import 'package:untitled1/api/network/remot/api_manager.dart';
 import 'package:untitled1/widgets/widgets.dart';
 import '../constants/constants.dart';
 import '../models/up_coming_response.dart';
+import '../provider/my_app_provider.dart';
 import '../screens/movie_details.dart';
 import 'add_movie.dart';
+import 'movie_added.dart';
 
 class UpComingWidget extends StatelessWidget {
   const UpComingWidget({super.key});
 
   @override
   Widget build(BuildContext context) {
+    var provider = Provider.of<MyAppProvider>(context);
     return Expanded(
       flex: 3,
       child: Container(
@@ -22,9 +26,9 @@ class UpComingWidget extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Text(
+               Text(
                 "Up Coming",
-                style: TextStyle(color: Colors.white, fontSize: 15),
+                style: TextStyle(color: Colors.white, fontSize: 17.sp, fontWeight: FontWeight.w700),
               ),
               SizedBox(
                 height: 10.h,
@@ -71,7 +75,10 @@ class UpComingWidget extends StatelessWidget {
                                           Center(child: CircularProgressIndicator(value: downloadProgress.progress)),
                                       errorWidget: (context, url, error) => const Icon(Icons.error),
                                     ),
-                                    AddMovie(result: upComing.results![index],)
+                                    provider.isMovieInWatchList(upComing.results![index])
+                                        ? MovieAdded(result: upComing.results![index])
+                                        : AddMovie(result: upComing.results![index])
+                                    // AddMovie(result: upComing.results![index],)
                                   ],
                                 ),
                               ),
