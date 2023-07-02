@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 import 'package:untitled1/api/network/remot/api_manager.dart';
-
 import '../../constants/constants.dart';
 import '../../models/search_response.dart';
 import '../../provider/my_app_provider.dart';
@@ -120,9 +119,7 @@ class _SearchTabState extends State<SearchTab> {
                                       errorWidget: (context, url, error) =>
                                           const Icon(Icons.error),
                                     ),
-                                    provider.added
-                                        ? MovieAdded(result: movie)
-                                        : AddMovie(result: movie)
+                                    AddMovie(result: movie)
                                   ],
                                 ),
                               ),

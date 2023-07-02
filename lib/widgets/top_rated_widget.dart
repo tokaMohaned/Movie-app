@@ -66,9 +66,7 @@ class TopRatedWidget extends StatelessWidget {
                                       Center(child: CircularProgressIndicator(value: downloadProgress.progress)),
                                   errorWidget: (context, url, error) => const Center(child: Icon(Icons.error)),
                                 ),
-                                provider.added
-                                    ? MovieAdded(result: movie)
-                                    : AddMovie(result: movie)
+                                AddMovie(result: movie)
                                    // AddMovie(result: topRated.results![index],)
                               ],
                             ),

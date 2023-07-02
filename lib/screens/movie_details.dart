@@ -86,9 +86,8 @@ class MovieDetails extends StatelessWidget {
                             Center(child: CircularProgressIndicator(value: downloadProgress.progress)),
                         errorWidget: (context, url, error) => const Icon(Icons.error),
                       ),
-                      provider.added
-                          ? AddMovie(result: movie)
-                          : MovieAdded(result: movie)
+                     AddMovie(result: movie)
+
                      // AddMovie(result: movie),
                     ],
                   ),

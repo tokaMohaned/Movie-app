@@ -1,8 +1,10 @@
 import 'package:dio/dio.dart';
+import 'package:untitled1/models/categories_response.dart';
 import 'package:untitled1/models/search_response.dart';
 import 'package:untitled1/models/similar_response.dart';
 import 'package:untitled1/models/top_rated_response.dart';
 import '../../../constants/constants.dart';
+import '../../../models/category_screen_response.dart';
 import '../../../models/popular_response.dart';
 import '../../../models/up_coming_response.dart';
 
@@ -58,5 +60,23 @@ class ApiManager {
     return searchResponse;
   }
 
+  static Future<CategoriesResponse> getCategoriesOfMovies() async {
+    Dio dio = Dio();
+    final response = await dio.get(
+      '$baseUrl/$categoriesEndPoint',
+      queryParameters: {'api_key': apikey},
+    );
+    CategoriesResponse categoriesResponse = CategoriesResponse.fromJson(response.data);
+    return categoriesResponse;
+  }
 
+  static Future<CategoryScreenResponse> getCategoryScreenMovies({required num genreId}) async {
+    Dio dio = Dio();
+    final response = await dio.get(
+      '$baseUrl/$categoryScreenEndPoint',
+      queryParameters: {'api_key': apikey,'with_genres': genreId},
+    );
+    CategoryScreenResponse categoryScreenResponse = CategoryScreenResponse.fromJson(response.data);
+    return categoryScreenResponse;
+  }
 }

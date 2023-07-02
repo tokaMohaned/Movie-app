@@ -5,6 +5,8 @@ String topRatedEndPoint = "3/movie/top_rated";
 String popularEndPoint = "3/movie/popular";
 String upComingEndPoint = "3/movie/upcoming";
 String searchEndPoint = "3/search/movie";
+String categoriesEndPoint = "3/genre/movie/list";
+String categoryScreenEndPoint = "3/discover/movie";
 String STATUS = "ok";
 String AccessToken =
     "eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJlNWZiZTczZmM1OGY0Zjk5N2IyZjdjNjVhOGZjNjg2MyIsInN1YiI6IjY0OThkMDM5ZWI3OWMyMDBhZDcyMDk0NiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.9ikkA6-c-i-MH4uwCc0MY-NUPxJqAdxhXUVApa1N8d4";

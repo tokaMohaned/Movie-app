@@ -1,12 +1,14 @@
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/material.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:untitled1/screens/movie_details.dart';
-import 'package:untitled1/widgets/widgets.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:untitled1/widgets/movie_added.dart';
+import '../../api/network/remot/firebase_finctions.dart';
 import '../../constants/constants.dart';
-import '../../widgets/movie_added.dart';
+import '../../models/movie_model.dart';
+import '../../screens/movie_details.dart';
+import '../../widgets/add_movie.dart';
+import '../../widgets/widgets.dart';
 
 class Watchlist extends StatelessWidget {
   static const String routeName = "Watchlist";
@@ -28,139 +30,146 @@ class Watchlist extends StatelessWidget {
                 fontWeight: FontWeight.w900),
           ),
           Expanded(
-            child: StreamBuilder<QuerySnapshot>(
-              stream: FirebaseFirestore.instance
-                  .collection('users')
-                  .doc(FirebaseAuth.instance.currentUser?.uid)
-                  .collection('watchList')
-                  .snapshots(),
-              builder: (context, snapshot) {
-                if (snapshot.hasError) {
-                  return Center(
-                    child: Text(
-                      'Error: ${snapshot.error}',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 20.sp,
-                      ),
-                    ),
-                  );
-                }
-
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const Center(
-                    child: CircularProgressIndicator(),
-                  );
-                }
-
-                if (snapshot.hasData && snapshot.data!.docs.isNotEmpty) {
-                  return ListView.separated(
-                    itemCount: snapshot.data!.docs.length,
-                    itemBuilder: (context, index) {
-                      var movie = snapshot.data!.docs[index];
-                      String movieId = movie.id;
-
-                      return GestureDetector(
-                        onTap: () {
-                          nextScreen(
-                            context,
-                            MovieDetails(movieId: movieId, movie: movie),
-                          );
-                        },
-                        child: Container(
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                          child: Row(
-                            children: [
-                              SizedBox(
-                                height: 150.h,
-                                child: Stack(
-                                  alignment: Alignment.topLeft,
-                                  children: [
-                                    CachedNetworkImage(
-                                      imageUrl:
-                                      "$baseImageUrl/original/${movie['posterPath']}",
-                                      progressIndicatorBuilder:
-                                          (context, url, downloadProgress) =>
-                                          Center(
-                                            child: CircularProgressIndicator(
-                                              value: downloadProgress.progress,
-                                            ),
-                                          ),
-                                      errorWidget: (context, url, error) =>
-                                      const Icon(Icons.error),
-                                    ),
-                                    MovieAdded(result: movie),
-                                  ],
-                                ),
-                              ),
-                              SizedBox(width: 20.w),
-                              Expanded(
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    SizedBox(
-                                      width: 200.w,
-                                      child: Text(
-                                        movie['title'] ?? '',
-                                        maxLines: 2,
-                                        overflow: TextOverflow.ellipsis,
-                                        style: const TextStyle(
-                                          fontSize: 20,
-                                          color: Colors.white,
-                                          fontWeight: FontWeight.w400,
-                                        ),
-                                      ),
-                                    ),
-                                    SizedBox(height: 6.h),
-                                    Text(
-                                      "${movie['releaseDate']}".substring(0, 4),
-                                      style: TextStyle(color: Colors.grey),
-                                    ),
-                                    SizedBox(height: 6.h),
-                                    SizedBox(
-                                      width: 200.w,
-                                      child: Text(
-                                        movie['overview'] ?? '',
-                                        maxLines: 5,
-                                        overflow: TextOverflow.ellipsis,
-                                        style: const TextStyle(
-                                          color: Colors.grey,
-                                          fontWeight: FontWeight.w600,
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ],
-                          ),
+              child: StreamBuilder(
+                  stream: FirebaseFunctions.getMoviesFromFireStore(),
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return const Center(child: CircularProgressIndicator());
+                    }
+                    if (snapshot.hasError) {
+                      return Center(
+                        child: Column(
+                          children: [
+                            Text("Something went wrong",
+                                style: GoogleFonts.novaSquare(
+                                    color: Colors.white)),
+                            Text("Error: ${snapshot.error}",
+                                style: GoogleFonts.novaSquare(
+                                    color: Colors.white)),
+                            ElevatedButton(
+                                onPressed: () {},
+                                child: Text(
+                                  "Try again",
+                                  style: GoogleFonts.novaSquare(),
+                                ))
+                          ],
                         ),
                       );
-                    },
-                    separatorBuilder: (BuildContext context, int index) {
-                      return Divider(
-                        color: const Color(0xFF707070),
-                        height: 30.h,
-                        thickness: 2,
+                    }
+                    List<MovieWatchListModel> movies =
+                        snapshot.data?.docs.map((doc) => doc.data()).toList() ??
+                            [];
+                    if (movies.isEmpty) {
+                      print("Data: ${snapshot.data}");
+                      return Column(
+                        children: [
+                          SizedBox(
+                            height: MediaQuery.of(context).size.height * 0.3,
+                          ),
+                          Center(
+                            child: Text(
+                              "No Movies Yet",
+                              style: GoogleFonts.novaSquare(
+                                  fontSize: 30.sp, color: Colors.white),
+                            ),
+                          ),
+                        ],
                       );
-                    },
-                  );
-                }
+                    }
+                    return Expanded(
+                      child: ListView.separated(
+                        itemBuilder: (BuildContext context, int index) {
+                          String movieId = "${movies[index].id}";
+                          var movie = movies[index];
+                          return GestureDetector(
+                            onTap: () {
+                              nextScreen(context,
+                                  MovieDetails(movieId: movieId, movie: movie));
+                            },
+                            child: Container(
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(8)),
+                              child: Row(
+                                children: [
+                                  SizedBox(
+                                    height: 150.h,
+                                    child: Stack(
+                                      alignment: Alignment.topLeft,
+                                      children: [
+                                        CachedNetworkImage(
+                                          imageUrl:
+                                              "$baseImageUrl/original/${movies[index].posterPath}",
+                                          progressIndicatorBuilder: (context,
+                                                  url, downloadProgress) =>
+                                              Center(
+                                                  child:
+                                                      CircularProgressIndicator(
+                                                          value:
+                                                              downloadProgress
+                                                                  .progress)),
+                                          errorWidget: (context, url, error) =>
+                                              const Icon(Icons.error),
+                                        ),
+                                        MovieAdded(movie: movies[index],)
+                                      ],
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    width: 20.w,
+                                  ),
+                                  Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      SizedBox(
+                                          width: 200.w,
+                                          child: Text(movies[index].title ?? "",
+                                              maxLines: 2,
+                                              overflow: TextOverflow.ellipsis,
+                                              style: const TextStyle(
+                                                  fontSize: 20,
+                                                  color: Colors.white,
+                                                  fontWeight:
+                                                      FontWeight.w400))),
+                                      SizedBox(
+                                        height: 6.h,
+                                      ),
+                                      Text(
+                                        "${movies[index].releaseDate}",
+                                        style:
+                                            const TextStyle(color: Colors.grey),
+                                      ),
+                                      SizedBox(
+                                        height: 6.h,
+                                      ),
+                                      SizedBox(
+                                          width: 200.w,
+                                          child: Text(
+                                              movies[index].overview ?? "",
+                                              maxLines: 5,
+                                              overflow: TextOverflow.ellipsis,
+                                              style: const TextStyle(
+                                                  color: Colors.grey,
+                                                  fontWeight:
+                                                      FontWeight.w600))),
+                                    ],
+                                  )
+                                ],
+                              ),
+                            ),
+                          );
+                        },
+                        itemCount: movies.length,
+                        separatorBuilder: (BuildContext context, int index) {
+                          return SizedBox(
+                            height: 8.h,
+                          );
+                        },
+                      ),
+                    );
+                  })
 
-                return Center(
-                  child: Text(
-                    'No movies added',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 20.sp,
-                    ),
-                  ),
-                );
-              },
-            ),
-          ),
+              ),
         ],
       ),
     );

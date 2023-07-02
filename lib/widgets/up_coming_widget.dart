@@ -3,13 +3,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 import 'package:untitled1/api/network/remot/api_manager.dart';
+import 'package:untitled1/widgets/movie_added.dart';
 import 'package:untitled1/widgets/widgets.dart';
 import '../constants/constants.dart';
+import '../models/movie_model.dart';
 import '../models/up_coming_response.dart';
 import '../provider/my_app_provider.dart';
 import '../screens/movie_details.dart';
 import 'add_movie.dart';
-import 'movie_added.dart';
 
 class UpComingWidget extends StatelessWidget {
   const UpComingWidget({super.key});
@@ -26,9 +27,12 @@ class UpComingWidget extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-               Text(
+              Text(
                 "Up Coming",
-                style: TextStyle(color: Colors.white, fontSize: 17.sp, fontWeight: FontWeight.w700),
+                style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 17.sp,
+                    fontWeight: FontWeight.w700),
               ),
               SizedBox(
                 height: 10.h,
@@ -57,6 +61,7 @@ class UpComingWidget extends StatelessWidget {
                       itemBuilder: (BuildContext context, int index) {
                         String movieId = "${upComing.results![index].id}";
                         Results movie = upComing.results![index];
+                        MovieWatchListModel movies = MovieWatchListModel();
                         return GestureDetector(
                           onTap: () {
                             nextScreen(context,
@@ -70,14 +75,21 @@ class UpComingWidget extends StatelessWidget {
                                 child: Stack(
                                   children: [
                                     CachedNetworkImage(
-                                      imageUrl: "$baseImageUrl/original/${upComing.results?[index].backdropPath }",
-                                      progressIndicatorBuilder: (context, url, downloadProgress) =>
-                                          Center(child: CircularProgressIndicator(value: downloadProgress.progress)),
-                                      errorWidget: (context, url, error) => const Icon(Icons.error),
+                                      imageUrl:
+                                          "$baseImageUrl/original/${upComing.results?[index].backdropPath}",
+                                      progressIndicatorBuilder: (context, url,
+                                              downloadProgress) =>
+                                          Center(
+                                              child: CircularProgressIndicator(
+                                                  value: downloadProgress
+                                                      .progress)),
+                                      errorWidget: (context, url, error) =>
+                                          const Icon(Icons.error),
                                     ),
-                                    provider.added
-                                        ? MovieAdded(result: upComing.results![index])
-                                        : AddMovie(result: upComing.results![index])
+                                    provider.isMovieAdded
+                                        ? MovieAdded(movie: movies)
+                                        : AddMovie(
+                                            result: upComing.results![index])
                                   ],
                                 ),
                               ),

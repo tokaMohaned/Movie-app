@@ -1,8 +1,8 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:untitled1/widgets/widgets.dart';
-import '../api/network/remot/database.dart';
+import '../api/network/remot/firebase_finctions.dart';
+import '../models/movie_model.dart';
 import '../provider/my_app_provider.dart';
 
 class AddMovie extends StatelessWidget {
@@ -11,15 +11,27 @@ class AddMovie extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final provider = Provider.of<MyAppProvider>(context);
-    return GestureDetector(
+    var provider = Provider.of<MyAppProvider>(context);
+    return InkWell(
       onTap: () {
-        // String movieId = result.movieId;
-        String movieTitle = result.title;
-        String releaseDate = result.releaseDate;
-        String overview = result.overview;
-        Database().addMovie(title: movieTitle, releaseDate: releaseDate, overview: overview,);
-        // provider.addWatchList(result);
+        MovieWatchListModel movie = MovieWatchListModel(
+          title: result.title,
+          overview: result.overview,
+          id: result.id,
+          releaseDate: result.releaseDate,
+          backdropPath: result.backdropPath,
+          posterPath: result.posterPath,
+          popularity: result.popularity,
+          voteAverage: result.voteAverage,
+          voteCount: result.voteCount,
+          originalLanguage: result.originalLanguage,
+          originalTitle: result.originalTitle,
+          adult: result.adult,
+          video: result.video,
+          genreIds: result.genreIds,
+           );
+        FirebaseFunctions.addMovieToFireStore(movie);
+        provider.isMovieAdded = true;
         showSnackBar(color: Colors.green, context: context, text: 'Movie has been added to watchList',);
       },
       child: const Stack(
