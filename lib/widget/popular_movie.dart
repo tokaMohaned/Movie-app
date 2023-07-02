@@ -54,8 +54,7 @@ class Popular_movie extends StatelessWidget {
                 Container(
                     alignment: Alignment.center,
                     child: Text("movie name")),
-                SizedBox(height: 3,),
-              ]
+                )]
             ),
           ),
         ],

@@ -1,5 +1,4 @@
-const String BASE_URL="themoviedb.org";
+ String BASE_URL=" https://api.themoviedb.org";
 
 //  https://api.themoviedb.org/3/movie/popular
-const String ApiKey="179fc6893dd72f4dd4b2d6e2fb9698d3";
-//179fc6893dd72f4dd4b2d6e2fb9698d3
+ String ApiKey="e5fbe73fc58f4f997b2f7c65a8fc6863";
