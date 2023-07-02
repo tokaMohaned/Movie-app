@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:lottie/lottie.dart';
 import '../home_layout/home_layout.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -16,7 +17,7 @@ class SplashScreenState extends State<SplashScreen> {
   void initState() {
     super.initState();
     Timer(
-      const Duration(seconds: 5),
+      const Duration(seconds: 3),
       () =>
           Navigator.pushReplacementNamed(context, HomeLayout.routeName),
     );
@@ -24,13 +25,11 @@ class SplashScreenState extends State<SplashScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
-      backgroundColor: Color(0xff121312),
+    return Scaffold(
+      backgroundColor: const Color(0xff121312),
       body: Center(
-        child: Image(
-          image: AssetImage("assets/images/splash.png"),
-        ),
-      ),
+        child: Lottie.asset("assets/animation/movie_animation.json"),
+    ),
     );
   }
 }

@@ -85,7 +85,7 @@ class MoreLikeThisWidget extends StatelessWidget {
                                         Center(child: CircularProgressIndicator(value: downloadProgress.progress)),
                                     errorWidget: (context, url, error) => const Center(child: Icon(Icons.error)),
                                   ),
-                                  provider.isMovieInWatchList(similar.results?[index])
+                                  provider.added
                                       ? MovieAdded(result: similar.results?[index])
                                       : AddMovie(result: similar.results?[index])
                                 ],

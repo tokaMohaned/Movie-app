@@ -9,6 +9,8 @@ import '../tabs/watch_list/watch_list.dart';
 
 class MyAppProvider extends ChangeNotifier {
   int index = 0;
+  bool added = false;
+
   List<dynamic> watchList = [];
   List<Widget> tabs = [
     const HomeTab(),
@@ -36,10 +38,6 @@ class MyAppProvider extends ChangeNotifier {
   removeWatchList(dynamic result) {
     watchList.remove(result);
     notifyListeners();
-  }
-
-  bool isMovieInWatchList(dynamic movie) {
-    return watchList.contains(movie);
   }
 
 }

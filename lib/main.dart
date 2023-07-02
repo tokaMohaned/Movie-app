@@ -1,28 +1,28 @@
-import 'dart:convert';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:untitled1/provider/my_app_provider.dart';
 import 'package:untitled1/shared/my_theme.dart';
 import 'package:untitled1/screens/splash_screen.dart';
-
+import 'firebase_options.dart';
 import 'home_layout/home_layout.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   runApp(ChangeNotifierProvider(
       create: (BuildContext context) => MyAppProvider(), child: MyApp()));
 }
 
 class MyApp extends StatelessWidget {
-  late MyAppProvider provider;
 
   MyApp({super.key});
 
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    getPreferences();
-    provider = Provider.of<MyAppProvider>(context);
     return MaterialApp(
       theme: MyThemeData.themeData,
       home: const SplashScreen(),
@@ -32,13 +32,5 @@ class MyApp extends StatelessWidget {
       },
       debugShowCheckedModeBanner: false,
     );
-  }
-
-  void getPreferences() async {
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
-    List<String>? watchListString = prefs.getStringList('watch_list');
-    if (watchListString != null) {
-      provider.watchList = watchListString.map((json) => jsonDecode(json)).toList();
-    }
   }
 }

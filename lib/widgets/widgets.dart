@@ -19,4 +19,18 @@ void showSnackBar({required BuildContext context, required Color color, required
       duration: const Duration(seconds: 3),
     ),
   );
+
+  void textFiledDecoration = const InputDecoration(
+    hintText: 'Search',
+    hintStyle: TextStyle(color: Colors.white),
+    focusedBorder: OutlineInputBorder(
+      borderSide: BorderSide(color: Color(0xFFee7b64), width: 2),
+    ),
+    enabledBorder: OutlineInputBorder(
+      borderSide: BorderSide(color: Color(0xFFee7b64), width: 2),
+    ),
+    errorBorder: OutlineInputBorder(
+      borderSide: BorderSide(color: Color(0xFFee7b64), width: 2),
+    ),
+  );
 }

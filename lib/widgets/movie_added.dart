@@ -13,6 +13,7 @@ class MovieAdded extends StatelessWidget {
     return GestureDetector(
       onTap: (){
         provider.removeWatchList(result);
+        provider.added = true;
         showSnackBar(color: Colors.redAccent, context: context, text: 'Movie has been removed to watchList',);
       },
       child: const Stack(

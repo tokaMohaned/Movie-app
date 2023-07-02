@@ -106,7 +106,7 @@ class PopularWidget extends StatelessWidget {
                                   errorWidget: (context, url, error) =>
                                       const Icon(Icons.error),
                                 ),
-                                provider.watchList.contains(movie.results![itemIndex])
+                                provider.added
                                     ? MovieAdded(result: movie.results![itemIndex])
                                     : AddMovie(result: movie.results![itemIndex])
                               ],

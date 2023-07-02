@@ -75,10 +75,9 @@ class UpComingWidget extends StatelessWidget {
                                           Center(child: CircularProgressIndicator(value: downloadProgress.progress)),
                                       errorWidget: (context, url, error) => const Icon(Icons.error),
                                     ),
-                                    provider.isMovieInWatchList(upComing.results![index])
+                                    provider.added
                                         ? MovieAdded(result: upComing.results![index])
                                         : AddMovie(result: upComing.results![index])
-                                    // AddMovie(result: upComing.results![index],)
                                   ],
                                 ),
                               ),

@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:untitled1/models/search_response.dart';
 import 'package:untitled1/models/similar_response.dart';
 import 'package:untitled1/models/top_rated_response.dart';
 import '../../../constants/constants.dart';
@@ -6,6 +7,7 @@ import '../../../models/popular_response.dart';
 import '../../../models/up_coming_response.dart';
 
 class ApiManager {
+
   static Future<PopularResponse> getPopular() async {
     final dio = Dio();
     final response = await dio.get(
@@ -35,6 +37,7 @@ class ApiManager {
     TopRatedResponse topRatedMovies = TopRatedResponse.fromJson(response.data);
     return topRatedMovies;
   }
+
   static Future<SimilarResponse> getSimilarMovies(String movieId) async {
     Dio dio = Dio();
     final response = await dio.get(
@@ -44,4 +47,16 @@ class ApiManager {
     SimilarResponse similarResponse = SimilarResponse.fromJson(response.data);
     return similarResponse;
   }
+
+  static Future<SearchResponse> searchOnMovies(String movieName) async {
+    Dio dio = Dio();
+    final response = await dio.get(
+      '$baseUrl/$searchEndPoint',
+      queryParameters: {'api_key': apikey,"query": movieName},
+    );
+    SearchResponse searchResponse = SearchResponse.fromJson(response.data);
+    return searchResponse;
+  }
+
+
 }
