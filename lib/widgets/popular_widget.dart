@@ -2,24 +2,19 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:provider/provider.dart';
-import 'package:untitled1/provider/my_app_provider.dart';
 import 'package:untitled1/widgets/widgets.dart';
-
 import '../api/network/remot/api_manager.dart';
 import '../constants/constants.dart';
-import '../models/popular_response.dart';
+import '../models/movie_response.dart';
 import '../screens/movie_details.dart';
 import 'add_movie.dart';
-import 'movie_added.dart';
 
 class PopularWidget extends StatelessWidget {
   const PopularWidget({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    var provider = Provider.of<MyAppProvider>(context);
-    return FutureBuilder<PopularResponse>(
+    return FutureBuilder<MovieResponse>(
       future: ApiManager.getPopular(),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
@@ -39,7 +34,7 @@ class PopularWidget extends StatelessWidget {
         if (snapshot.data == null) {
           return Image.asset("assets/images/loading.png");
         }
-        PopularResponse movie = snapshot.data!;
+        MovieResponse movie = snapshot.data!;
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [

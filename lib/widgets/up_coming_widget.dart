@@ -1,25 +1,27 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:provider/provider.dart';
 import 'package:untitled1/api/network/remot/api_manager.dart';
-import 'package:untitled1/widgets/movie_added.dart';
 import 'package:untitled1/widgets/widgets.dart';
 import '../constants/constants.dart';
-import '../models/movie_model.dart';
-import '../models/up_coming_response.dart';
-import '../provider/my_app_provider.dart';
+import '../models/movie_response.dart';
 import '../screens/movie_details.dart';
 import 'add_movie.dart';
 
-class UpComingWidget extends StatelessWidget {
+class UpComingWidget extends StatefulWidget {
   const UpComingWidget({super.key});
 
   @override
+  State<UpComingWidget> createState() => _UpComingWidgetState();
+}
+
+class _UpComingWidgetState extends State<UpComingWidget> {
+  bool isAdded = false;
+
+  @override
   Widget build(BuildContext context) {
-    var provider = Provider.of<MyAppProvider>(context);
     return Expanded(
-      flex: 3,
+
       child: Container(
         color: const Color(0xFF282A28),
         child: Padding(
@@ -38,7 +40,7 @@ class UpComingWidget extends StatelessWidget {
                 height: 10.h,
               ),
               Expanded(
-                child: FutureBuilder<UpComingResponse>(
+                child: FutureBuilder<MovieResponse>(
                   future: ApiManager.getUpComingMovies(),
                   builder: (context, snapshot) {
                     if (snapshot.connectionState == ConnectionState.waiting) {
@@ -54,18 +56,16 @@ class UpComingWidget extends StatelessWidget {
                     if (snapshot.data == null) {
                       return Image.asset("assets/images/loading.png");
                     }
-                    UpComingResponse upComing = snapshot.data!;
+                    MovieResponse upComing = snapshot.data!;
                     return ListView.separated(
                       scrollDirection: Axis.horizontal,
                       itemCount: snapshot.data!.results!.length,
                       itemBuilder: (BuildContext context, int index) {
                         String movieId = "${upComing.results![index].id}";
-                        Results movie = upComing.results![index];
-                        MovieWatchListModel movies = MovieWatchListModel();
                         return GestureDetector(
                           onTap: () {
                             nextScreen(context,
-                                MovieDetails(movieId: movieId, movie: movie));
+                                MovieDetails(movieId: movieId, movie: upComing.results![index]));
                           },
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
@@ -86,10 +86,7 @@ class UpComingWidget extends StatelessWidget {
                                       errorWidget: (context, url, error) =>
                                           const Icon(Icons.error),
                                     ),
-                                    provider.isMovieAdded
-                                        ? MovieAdded(movie: movies)
-                                        : AddMovie(
-                                            result: upComing.results![index])
+                                    AddMovie(result: upComing.results![index])
                                   ],
                                 ),
                               ),

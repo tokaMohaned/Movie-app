@@ -1,12 +1,9 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:provider/provider.dart';
 import '../constants/constants.dart';
-import '../provider/my_app_provider.dart';
 import '../widgets/add_movie.dart';
 import '../widgets/more_like_this_widget.dart';
-import '../widgets/movie_added.dart';
 
 class MovieDetails extends StatelessWidget {
   static const String routeName = "MovieDetails";
@@ -17,7 +14,6 @@ class MovieDetails extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var provider = Provider.of<MyAppProvider>(context);
     return Scaffold(
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,

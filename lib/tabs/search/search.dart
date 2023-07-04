@@ -1,14 +1,11 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:provider/provider.dart';
 import 'package:untitled1/api/network/remot/api_manager.dart';
 import '../../constants/constants.dart';
-import '../../models/search_response.dart';
-import '../../provider/my_app_provider.dart';
+import '../../models/movie_response.dart';
 import '../../screens/movie_details.dart';
 import '../../widgets/add_movie.dart';
-import '../../widgets/movie_added.dart';
 import '../../widgets/widgets.dart';
 
 class SearchTab extends StatefulWidget {
@@ -23,7 +20,6 @@ class _SearchTabState extends State<SearchTab> {
 
   @override
   Widget build(BuildContext context) {
-    var provider = Provider.of<MyAppProvider>(context);
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 10.h),
       child: Column(
@@ -84,18 +80,17 @@ class _SearchTabState extends State<SearchTab> {
                 if (snapshot.data == null) {
                   return Image.asset("assets/images/loading.png");
                 }
-                SearchResponse search = snapshot.data!;
+                MovieResponse search = snapshot.data!;
                 return Expanded(
                   child: ListView.separated(
                     scrollDirection: Axis.vertical,
                     itemCount: snapshot.data!.results!.length,
                     itemBuilder: (BuildContext context, int index) {
                       String movieId = "${search.results![index].id}";
-                      Results movie = search.results![index];
                       return GestureDetector(
                         onTap: () {
                           nextScreen(context,
-                              MovieDetails(movieId: movieId, movie: movie));
+                              MovieDetails(movieId: movieId, movie: search.results![index]));
                         },
                         child: Container(
                           decoration: BoxDecoration(
@@ -119,7 +114,7 @@ class _SearchTabState extends State<SearchTab> {
                                       errorWidget: (context, url, error) =>
                                           const Icon(Icons.error),
                                     ),
-                                    AddMovie(result: movie)
+                                    AddMovie(result: search.results![index])
                                   ],
                                 ),
                               ),

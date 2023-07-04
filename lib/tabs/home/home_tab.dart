@@ -16,11 +16,11 @@ class HomeTab extends StatelessWidget {
         children: [
           const PopularWidget(),
           SizedBox(
-            height: 30.h,
+            height: 20.h,
           ),
           const TopRatedWidget(),
           SizedBox(
-            height: 30.h,
+            height: 20.h,
           ),
           const UpComingWidget(),
         ],

@@ -14,7 +14,6 @@ class MovieWatchListModel {
     this.video,
     this.voteAverage,
     this.voteCount,
-    this.movieId
   });
 
   MovieWatchListModel.fromJson(dynamic json) {
@@ -31,7 +30,6 @@ class MovieWatchListModel {
     title = json['title'];
     video = json['video'];
     voteAverage = json['vote_average'];
-    movieId = json['movieId'];
   }
   bool? adult;
   String? backdropPath;
@@ -44,7 +42,6 @@ class MovieWatchListModel {
   String? posterPath;
   String? releaseDate;
   String? title;
-  String? movieId;
   bool? video;
   num? voteAverage;
   num? voteCount;
@@ -64,7 +61,6 @@ class MovieWatchListModel {
     map['title'] = title;
     map['video'] = video;
     map['vote_average'] = voteAverage;
-    map['movieId'] = movieId;
     return map;
   }
 

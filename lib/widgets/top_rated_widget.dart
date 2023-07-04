@@ -1,15 +1,12 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:provider/provider.dart';
-import 'package:untitled1/models/top_rated_response.dart';
 import 'package:untitled1/screens/movie_details.dart';
 import 'package:untitled1/widgets/add_movie.dart';
 import 'package:untitled1/widgets/widgets.dart';
 import '../api/network/remot/api_manager.dart';
 import '../constants/constants.dart';
-import '../provider/my_app_provider.dart';
-import 'movie_added.dart';
+import '../models/movie_response.dart';
 
 
 class TopRatedWidget extends StatelessWidget {
@@ -17,9 +14,8 @@ class TopRatedWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var provider = Provider.of<MyAppProvider>(context);
     return  Expanded(
-      flex: 2,
+
       child: Container(
         color: const Color(0xFF282A28),
         child: Padding(
@@ -35,7 +31,7 @@ class TopRatedWidget extends StatelessWidget {
                 height: 10.h,
               ),
               Expanded(
-                child: FutureBuilder<TopRatedResponse>(
+                child: FutureBuilder<MovieResponse>(
                   future: ApiManager.getTopRatedMovies(),
                   builder: (context, snapshot) {
                     if (snapshot.connectionState == ConnectionState.waiting) {
@@ -47,26 +43,25 @@ class TopRatedWidget extends StatelessWidget {
                     if (snapshot.data == null) {
                       return Image.asset("assets/images/loading.png");
                     }
-                    TopRatedResponse topRated = snapshot.data!;
+                    MovieResponse topRated = snapshot.data!;
                       return ListView.separated(
                         scrollDirection: Axis.horizontal,
                         itemCount: snapshot.data!.results!.length,
                         itemBuilder: (BuildContext context, int index) {
                               String movieId = "${topRated.results![index].id}";
-                              Results movie = topRated.results![index];
                           return GestureDetector(
                             onTap: (){
-                              nextScreen(context, MovieDetails(movieId: movieId, movie: movie));
+                              nextScreen(context, MovieDetails(movieId: movieId, movie: topRated.results![index]));
                             },
                             child: Stack(
                               children: [
                                 CachedNetworkImage(
-                                  imageUrl: "$baseImageUrl/original/${topRated.results?[index].backdropPath}",
+                                  imageUrl: "$baseImageUrl/original/${topRated.results?[index].posterPath}",
                                   progressIndicatorBuilder: (context, url, downloadProgress) =>
                                       Center(child: CircularProgressIndicator(value: downloadProgress.progress)),
                                   errorWidget: (context, url, error) => const Center(child: Icon(Icons.error)),
                                 ),
-                                AddMovie(result: movie)
+                                AddMovie(result: topRated.results![index])
                                    // AddMovie(result: topRated.results![index],)
                               ],
                             ),

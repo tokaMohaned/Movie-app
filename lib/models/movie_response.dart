@@ -1,14 +1,14 @@
 
-class PopularResponse {
-  PopularResponse({
+class MovieResponse {
+  MovieResponse({
     this.page,
     this.results,
     this.totalPages,
     this.totalResults,
   });
 
-  factory PopularResponse.fromJson(Map<String, dynamic> json) {
-    return PopularResponse(
+  factory MovieResponse.fromJson(Map<String, dynamic> json) {
+    return MovieResponse(
       page: json['page'],
       results: json['results'] != null
           ? List<Results>.from(json['results'].map((x) => Results.fromJson(x)))

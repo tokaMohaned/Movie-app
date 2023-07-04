@@ -9,7 +9,6 @@ import 'package:untitled1/widgets/widgets.dart';
 import '../constants/constants.dart';
 import '../provider/my_app_provider.dart';
 import 'add_movie.dart';
-import 'movie_added.dart';
 
 class MoreLikeThisWidget extends StatelessWidget {
   String? movieId;
