@@ -1,8 +1,8 @@
 import 'package:dio/dio.dart';
 import 'package:untitled1/models/categories_response.dart';
-import 'package:untitled1/models/similar_response.dart';
 import '../../../constants/constants.dart';
 import '../../../models/category_screen_response.dart';
+import '../../../models/movie_details_response.dart';
 import '../../../models/movie_response.dart';
 
 class ApiManager {
@@ -37,13 +37,23 @@ class ApiManager {
     return topRatedMovies;
   }
 
-  static Future<SimilarResponse> getSimilarMovies(String movieId) async {
+  static Future<MovieDetailsResponse> getMovieDetails(String movieId) async {
+    Dio dio = Dio();
+    final response = await dio.get(
+      '$baseUrl/3/movie/$movieId',
+      queryParameters: {'api_key': apikey},
+    );
+    MovieDetailsResponse detailsResponse = MovieDetailsResponse.fromJson(response.data);
+    return detailsResponse;
+  }
+
+  static Future<MovieResponse> getSimilarMovies(String movieId) async {
     Dio dio = Dio();
     final response = await dio.get(
       '$baseUrl/3/movie/$movieId/similar',
       queryParameters: {'api_key': apikey},
     );
-    SimilarResponse similarResponse = SimilarResponse.fromJson(response.data);
+    MovieResponse similarResponse = MovieResponse.fromJson(response.data);
     return similarResponse;
   }
 
