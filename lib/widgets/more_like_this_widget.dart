@@ -1,13 +1,11 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:provider/provider.dart';
 import 'package:untitled1/api/network/remot/api_manager.dart';
-import 'package:untitled1/models/similar_response.dart';
 import 'package:untitled1/screens/movie_details.dart';
 import 'package:untitled1/widgets/widgets.dart';
 import '../constants/constants.dart';
-import '../provider/my_app_provider.dart';
+import '../models/movie_response.dart';
 import 'add_movie.dart';
 
 class MoreLikeThisWidget extends StatelessWidget {
@@ -17,7 +15,6 @@ class MoreLikeThisWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var provider = Provider.of<MyAppProvider>(context);
     return FutureBuilder(
       future: ApiManager.getSimilarMovies(movieId!),
       builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
@@ -40,9 +37,8 @@ class MoreLikeThisWidget extends StatelessWidget {
             ),
           );
         }
-        SimilarResponse similar = snapshot.data!;
+        MovieResponse similar = snapshot.data!;
         return Expanded(
-          flex: 3,
           child: Container(
             color: const Color(0xFF282A28),
             child: Padding(
@@ -50,11 +46,11 @@ class MoreLikeThisWidget extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text(
+                   Text(
                     "More Like This",
                     style: TextStyle(
                         color: Colors.white,
-                        fontSize: 18,
+                        fontSize: 18.sp,
                         fontWeight: FontWeight.w800),
                   ),
                   SizedBox(
@@ -66,6 +62,7 @@ class MoreLikeThisWidget extends StatelessWidget {
                     itemCount: similar.results!.length,
                     itemBuilder: (BuildContext context, int index) {
                       Results movie = similar.results![index];
+                      String movieId = similar.results![index].id.toString();
                       return GestureDetector(
                         onTap: () {
                           nextScreenReplace(context,
